@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+motor
+pydantic
+pydantic-settings
+python-jose[cryptography]
+bcrypt
+python-multipart
+twilio
+python-dateutil
+apscheduler

@@ -1,0 +1,51 @@
+# Render Blueprint for FinTech Backend
+# This file configures automatic deployment on Render
+
+services:
+  # FastAPI Backend Service
+  - type: web
+    name: fintech-backend
+    runtime: python
+    plan: free
+    region: singapore  # Choose region closest to you
+    branch: main  # Git branch to deploy
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    
+    # Environment variables (configure these in Render dashboard)
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true  # Render will auto-generate
+      
+      - key: ALGORITHM
+        value: HS256
+      
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 30
+      
+      - key: MONGODB_URL
+        sync: false  # Set manually in dashboard with your MongoDB Atlas URL
+      
+      - key: DATABASE_NAME
+        value: fintech_app
+      
+      - key: CORS_ORIGINS
+        value: '["https://your-app-name.netlify.app"]'  # Update with your Netlify URL
+      
+      - key: REMINDER_DAYS_BEFORE
+        value: 3
+      
+      - key: DEBUG
+        value: False
+      
+      # Optional: Twilio credentials (set manually if using WhatsApp reminders)
+      # - key: TWILIO_ACCOUNT_SID
+      #   sync: false
+      # - key: TWILIO_AUTH_TOKEN
+      #   sync: false
+      # - key: TWILIO_WHATSAPP_FROM
+      #   sync: false
+    
+    # Auto-deploy on git push
+    autoDeploy: true
